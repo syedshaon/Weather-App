@@ -17,10 +17,10 @@ el.addEventListener("click", () => {
 /* Bulma CSS Hamburger Menu Ends */
 
 /* npx kill-port 3000 */
-const apiKey = `0af83f2b05c8420fbbd173558230905 `;
+const apiKey = `0af83f2b05c8420fbbd173558230905`;
 
 async function logJSONData(city) {
-  const response = await fetch(`http://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${city}`);
+  const response = await fetch(`https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${city}`);
   const jsonData = await response.json();
   return jsonData;
 }
