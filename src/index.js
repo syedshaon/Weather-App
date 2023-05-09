@@ -1,14 +1,6 @@
-// import "normalize.css";
-// Will be using reset css through scss
-
-//  TO DISABLE DONT IMPORT * AS bOOTSTRAP ALSO DON'T IMPORT BOOTSTRAP IN STYLE.SCSS FILE
-/* import "bootstrap"; */
-
 import "./style.scss";
-// Import all of Bootstrap's JS
-import * as bootstrap from "bootstrap";
-// or, specify which plugins you need:
-// import { Tooltip, Toast, Popover } from 'bootstrap'
+import loading from "./assets/giphy.gif";
+import oops from "./assets/ooops.png";
 
 /* Following is required for Bulma CSS Hamburger Menu */
 
@@ -26,7 +18,58 @@ el.addEventListener("click", () => {
 
 /* npx kill-port 3000 */
 
-/* Need to add any of the following to vsCode setting json file to have CLASS intellisense */
+async function logJSONData(city) {
+  const response = await fetch(`http://api.weatherapi.com/v1/current.json?key=${process.env.KEY}&q=${city}`);
+  const jsonData = await response.json();
+  return jsonData;
+}
 
-/*  "css.styleSheets": ["https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css", "/style.css", "style.css", "style.scss", "${fileBasenameNoExtension}.css"],
-  "css.styleSheets": ["https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css", "/style.css", "style.css", "style.scss", "${fileBasenameNoExtension}.css"] */
+// logJSONData("Paris");
+
+// Take input from search form
+
+function loadResults(val) {
+  document.getElementById("weather-card").style.display = "block";
+  document.getElementById("weather-image").innerHTML = `<img   src="${loading}" alt="Placeholder image" />`;
+  document.getElementById("weather-image").style.display = "block";
+  document.getElementById("title").innerText = ``;
+  document.getElementById("condition").innerHTML = ``;
+  document.getElementById("subtitle").innerText = ``;
+
+  logJSONData(val)
+    .then((weather) => {
+      if (weather.error) {
+        if (weather.error.code === 1003) {
+          document.getElementById("title").innerText = "Please write your city name!";
+          document.getElementById("title").classList.add("has-text-danger");
+        } else {
+          document.getElementById("title").innerText = weather.error.message;
+        }
+        document.getElementById("weather-image").innerHTML = `<img   src="${oops}" alt="Placeholder image" />`;
+      } else {
+        document.getElementById("weather-image").style.display = "none";
+        console.log(weather);
+        document.getElementById("title").innerText = `Weather for ${weather.location.name}, ${weather.location.country}`;
+
+        document.getElementById("condition").innerHTML = `<p class="has-text-centered" id=""> ${weather.current.condition.text} </p> <img   src="https:${weather.current.condition.icon}" alt="weather image" "image is-fluid" />`;
+
+        document.getElementById("subtitle").innerText = `Tempareture: ${weather.current.temp_c}°C, Humidity: ${weather.current.humidity}%,  Feels Like: ${weather.current.feelslike_c}°C`;
+      }
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+}
+
+document.getElementById("weather-form-button").addEventListener("click", (e) => {
+  e.preventDefault();
+  const cityName = document.getElementById("weather-form").city.value;
+  loadResults(cityName);
+});
+
+if (navigator.geolocation) {
+  navigator.geolocation.watchPosition((position) => {
+    loadResults(`${position.coords.latitude}, ${position.coords.longitude}`);
+    console.log(`${position.coords.latitude}, ${position.coords.longitude}`);
+  });
+}

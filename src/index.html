@@ -4,12 +4,38 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
   </head>
 
-  <body class="bg-danger">
-    <div class="container py-4 px-3 mx-auto">
-      <h1>Hello, Bootstrap and Webpack!</h1>
-      <button class="btn btn-primary">Primary button</button>
-    </div>
+  <body class="has-background-light">
+    <section class="p-6 main is-flex is-align-items-center is-justify-content-center">
+      <div class="container .is-max-desktop my-5 mx-auto">
+        <form class="my-6" id="weather-form" action="#" method="get">
+          <div class="field has-addons is-justify-content-center">
+            <div class="control is-expanded">
+              <input class="input" name="city" type="text" placeholder="Write your city name here" />
+            </div>
+            <div class="control">
+              <button id="weather-form-button" class="button is-info">Search For Weather</button>
+            </div>
+          </div>
+        </form>
+        <div id="weather-card" class="columns is-desktop">
+          <div class="card column mx-auto is-four-fifths-tablet is-two-thirds-desktop is-half-widescreen is-one-quarter-fullhd">
+            <div class="card-image">
+              <div class="card-content">
+                <p class="title has-text-centered" id="title"></p>
+                <div id="condition" class="has-text-centered"></div>
+
+                <p class="has-text-centered" id="subtitle"></p>
+              </div>
+              <figure id="weather-image" class="image is-fluid"></figure>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
   </body>
 </html>
